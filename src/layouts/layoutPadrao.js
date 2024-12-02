@@ -1,33 +1,56 @@
-import { Box, Heading, Button, Grid, HStack, GridItem, Center } from "@chakra-ui/react"
-import { useRouter } from 'next/router'
+import { Box, Heading, Button, Center, DrawerActionTrigger, DrawerTrigger, Icon } from "@chakra-ui/react"
+import { MdOutlineSailing } from "react-icons/md";
+import {
+  DrawerBackdrop,
+  DrawerBody,
+  DrawerCloseTrigger,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerRoot,
+  DrawerTitle,
+} from "@/components/ui/drawer"
 
-const MainLayout=({children}) =>
-{
 
-  const router = useRouter()
+const MainLayout = ({ children, data }) => {
 
-  const goPage = () => {
-    router.push('/')
-  }
-
-
-  return(
-      <Box height="100vh">
-      <Heading w='full' color="red" backgroundColor="#F40009" display="block">
-      COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA  COCA-COLA
+  return (
+    <Box>
+      <Heading w='full' color="red" backgroundColor="#F40009" display="block" height="5vh">
+        <DrawerRoot placement="left">
+          <DrawerBackdrop />
+          <DrawerTrigger>
+            <Icon fontSize="large">
+              <MdOutlineSailing color="black" cursor="pointer" />
+            </Icon>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>LISTA</DrawerTitle>
+            </DrawerHeader>
+            <DrawerBody>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+            </DrawerBody>
+            <DrawerFooter>
+            </DrawerFooter>
+            <DrawerCloseTrigger />
+          </DrawerContent>
+        </DrawerRoot>
       </Heading>
-      <main><Box width="full">{children}</Box></main>
-      <footer width="100%">
-      <Center>
-      <Button variant="plain" colorPalette="red" onClick={goPage} >Termos de Serviço</Button>
-      <Button variant="plain" colorPalette="red" onClick={goPage} >Política de Privacidade </Button>
-      <Button variant="plain" colorPalette="red" onClick={goPage} >Termos de Serviço de IA</Button>
-      <Button variant="plain" colorPalette="red" onClick={goPage} >Perguntas Frequentes</Button>
-      </Center></footer>
-      </Box>
-
-      
-);
+      <main><Box width="full" padding="3vh" height="90vh">{children}</Box></main>
+      <footer width="full">
+        <Center>
+          <Button cursor="pointer" variant="plain" color="red" onClick={() => { data }} >Termos de Serviço</Button>
+          <Button cursor="pointer" variant="plain" color="red" onClick={() => { data }} >Política de Privacidade </Button>
+          <Button cursor="pointer" variant="plain" color="red" onClick={() => { data }} >Termos de Serviço de IA</Button>
+          <Button cursor="pointer" variant="plain" color="red" onClick={() => { data }} >Perguntas Frequentes</Button>
+        </Center>
+      </footer>
+    </Box>
+  );
 }
 
 export default MainLayout;

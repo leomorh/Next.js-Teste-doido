@@ -1,23 +1,12 @@
-import { Button, Card, Input, Stack, Image } from "@chakra-ui/react"
+import { Button, Card, Input, Stack, Image, HStack } from "@chakra-ui/react"
 import { Field } from "@/components/ui/field"
 import { PasswordInput } from "@/components/ui/password-input"
-import { useRouter } from 'next/router'
-import Popover from "@/components/popover";
+import { Checkbox } from "@/components/ui/checkbox"
 
 
 
-
-function Login(){
-  const router = useRouter()
-
-  const goPage = () => {
-    router.push('/')
-  }
-  const goCadastro = () => {
-    router.push('/teste/cadastro')
-  }
-
-
+export default function Login(){
+  
   return(
  <Card.Root width ="1/3" float ="right" height ="100vh">
     <Card.Header>
@@ -34,26 +23,29 @@ function Login(){
     </Card.Header>
     <Card.Body height="20%">
       <Stack gap="4" w="full">
-        <Popover></Popover>
         <Field label="Usuario" color="red">
-        <Input placeholder="Seu Usuario"/>
+        <Input required placeholder="Seu Usuario"/>
         </Field>
         <Field label="Senha" color="red">
-        <PasswordInput placeholder="Sua Senha"/>
-        <Button width="25%" variant="plain" colorPalette="red" onClick={goPage} size="sm">esqueci minha senha</Button>
+        <PasswordInput required placeholder="Sua Senha"/>
         </Field>
-        
-        <Button width="full" variant="solid" colorPalette="red" onClick={goPage} size="xl">Entrar</Button>
-        
+        <HStack>
+        <Field>
+        <Checkbox>Lembrar-me</Checkbox>
+        </Field>
+        <Field>
+        <Button variant="plain" colorPalette="red" size="sm" float="right"> esqueci minha senha </Button>
+        </Field>
+        </HStack>
+        <Button width="full" variant="solid" colorPalette="red"  size="xl"> Entrar </Button>
       </Stack>
     </Card.Body>
     <Card.Footer justifyContent="flex-end">
-      <Button width="35%" variant="surface" colorPalette="red" onClick={goCadastro}>Cadastrar</Button>
-      <Button variant="outline" colorPalette="red" onClick={goPage}size="sm" >Cancel</Button>
-    
+      <Button width="35%" variant="surface" colorPalette="red"  >Cadastrar</Button>
+      <Button variant="outline" colorPalette="red"  size="sm"> Cancel </Button>
     </Card.Footer>
   </Card.Root>
   );
 }
 
-export default Login;
+

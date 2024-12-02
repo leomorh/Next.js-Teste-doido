@@ -1,9 +1,18 @@
-import { Button, Card, Input, Stack, Image, HStack, StackSeparator, Grid, GridItem } from "@chakra-ui/react"
+import { Button, Card, Input, Stack, Image, Grid, GridItem } from "@chakra-ui/react"
 import { Field } from "@/components/ui/field"
 import { PasswordInput } from "@/components/ui/password-input"
 import { useRouter } from 'next/router'
 
 function Cadastro(){
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
   const router = useRouter()
 
   const goPage = () => {

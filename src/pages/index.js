@@ -1,7 +1,6 @@
 
 import { useRouter } from 'next/router'
-import MainLayout from "@/layouts/layoutPadrao"
-
+import  MainLayout  from "@/layouts/layoutPadrao"
 import { Button, Image } from "@chakra-ui/react"
 
 
