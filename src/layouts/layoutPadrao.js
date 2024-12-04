@@ -1,4 +1,4 @@
-import { Box, Heading, Button, Center, DrawerActionTrigger, DrawerTrigger, Icon } from "@chakra-ui/react"
+import { Box, Heading, Button, Center, Text, DrawerTrigger, Icon, HStack } from "@chakra-ui/react"
 import { MdOutlineSailing } from "react-icons/md";
 import {
   DrawerBackdrop,
@@ -12,17 +12,22 @@ import {
 } from "@/components/ui/drawer"
 
 
+
+
 const MainLayout = ({ children, data }) => {
 
   return (
-    <Box>
-      <Heading w='full' color="red" backgroundColor="#F40009" display="block" height="5vh">
+    <Box display="flex" flexDirection="column" minHeight="100vh">
+      <Heading w='full' color="red" backgroundColor="#F40009" display="block" height="4vh">
         <DrawerRoot placement="left">
           <DrawerBackdrop />
           <DrawerTrigger>
-            <Icon fontSize="large">
-              <MdOutlineSailing color="black" cursor="pointer" />
-            </Icon>
+            <HStack cursor="pointer">
+              <Icon >
+                <MdOutlineSailing color="black" />
+              </Icon>
+              <Text color="black"> Menu </Text>
+            </HStack>
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader>
@@ -40,9 +45,10 @@ const MainLayout = ({ children, data }) => {
           </DrawerContent>
         </DrawerRoot>
       </Heading>
-      <main><Box width="full" padding="3vh" height="90vh">{children}</Box></main>
-      <footer width="full">
-        <Center>
+      <main style={{ flex: 1, width: '100%' }} ><Box padding="3vh">{children}</Box></main>
+
+      <footer width="full" height="5vh">
+        <Center as="footer" width="full" height="5vh" >
           <Button cursor="pointer" variant="plain" color="red" onClick={() => { data }} >Termos de Serviço</Button>
           <Button cursor="pointer" variant="plain" color="red" onClick={() => { data }} >Política de Privacidade </Button>
           <Button cursor="pointer" variant="plain" color="red" onClick={() => { data }} >Termos de Serviço de IA</Button>
