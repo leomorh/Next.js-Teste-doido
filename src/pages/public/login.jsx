@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function CardWithForm() {
   const router = useRouter()
 
-  const handleClick = async (data) => {
+  const handleClick = async (data={}) => {
     try {
       const response = await axios.post(`/user/login`, { ...data })
       localStorage.setItem('token', response.token)

@@ -7,13 +7,13 @@ import { useState } from "react";
 import { withMask } from 'use-mask-input';
 
 
-export default function Cadastro ({handleDataFromChild}) { 
-
-  const [Username, setUsername] = useState('')
-  const [Password, setPassword] = useState('')
-  const [Numero, setNumero] = useState('')
-  const [Email, setEmail] = useState('')
-  const [Cpf, setCpf] = useState('')
+export default function Cadastro({ handleDataFromChild }) {
+  const [Name, setName] = useState('');
+  const [Username, setUsername] = useState('');
+  const [Password, setPassword] = useState('');
+  const [Phone, setPhone] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Cpf, setCpf] = useState('');
   const [State, setState] = useState('');
   const [Zipcode, setZipcode] = useState('');
   const [Street, setStreet] = useState('');
@@ -22,8 +22,9 @@ export default function Cadastro ({handleDataFromChild}) {
   const [Number, setNumber] = useState('');
   const [Complement, setComplement] = useState('');
   const [PasswordConfirm, setPasswordConfirm] = useState('');
-  const endereco = { Zipcode, State, Street, City, District, Number, Complement };
-  const data = { Username, Password, endereco, Numero, Email, Cpf }
+  Zipcode, State, Street, City, District, Number, Complement
+  const data = { Username, Name, Password, Phone, Email, Cpf }
+  const endereco = { Zipcode, State, Street, City, District, Number, Complement }
 
   const router = useRouter()
 
@@ -32,8 +33,8 @@ export default function Cadastro ({handleDataFromChild}) {
   }
 
   const SendData = () => {
-    if(PasswordConfirm === Password){
-     handleDataFromChild(data);
+    if (PasswordConfirm === Password) {
+      handleDataFromChild(data, endereco);
     }
 
   }
@@ -56,7 +57,10 @@ export default function Cadastro ({handleDataFromChild}) {
       <Card.Body>
         <Stack gap="4" w="full">
           <Field label=" Nome do Usuario" color="red">
-            <Input  required onChange={(e) => setUsername(e.target.value)} placeholder="Seu Usuario" />
+            <Input required onChange={(e) => setName(e.target.value)} placeholder="Seu Nome" />
+          </Field>
+          <Field label=" Usuario" color="red">
+            <Input required onChange={(e) => setUsername(e.target.value)} placeholder="Seu Usuario" />
           </Field>
           <Field label="Senha" color="red">
             <PasswordInput required onChange={(e) => setPassword(e.target.value)} placeholder="Sua Senha" />
@@ -79,7 +83,7 @@ export default function Cadastro ({handleDataFromChild}) {
             </Grid>
           </Field>
           <Field label="Numero de Telefone" color="red">
-            <Input required onChange={(e) => setNumero(e.target.value)} placeholder="numero" color="red" ref={withMask("(99) 9 9999-9999")} />
+            <Input required onChange={(e) => setPhone(e.target.value)} placeholder="numero" color="red" ref={withMask("(99) 9 9999-9999")} />
           </Field>
           <Field label="Email" color="red">
             <Input required onChange={(e) => setEmail(e.target.value)} placeholder="eu@exemplo.com" />

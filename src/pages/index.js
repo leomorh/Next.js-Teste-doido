@@ -8,7 +8,7 @@ const app = () => {
   const router = useRouter()
 
   const goPage = () => {
-    router.push('/teste')
+    router.push('/user/login')
   }
 
   return (

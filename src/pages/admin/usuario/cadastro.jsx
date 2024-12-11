@@ -1,31 +1,54 @@
 import Cadastro from "@/components/cadastro";
 import MainLayout from "@/layouts/layoutPadrao";
 import { Center, HStack, Text, Skeleton, Stack } from "@chakra-ui/react";
-import registerAddress from "../endereco/index"
 import React from "react";
 import { useState } from "react";
 import axios from "../../../utils/axios";
 
-
-export default function CardWithForm(){
+export default function CardWithForm() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [idUser, setidUser] = useState(null);
+  const[endereco, setEndereco] = useState([]);
+  let Adress = {idUser, endereco}
 
-  const handleDataFromChild = async (data = {}) => {
-    await registerUser(data);
+
+  const handleDataFromChild = async (data, endereco={}) => {
+    await registerUser(data, endereco);
   };
 
-  const registerUser = async (data) => {
+  const registerUser = async (data, endereco={}) => {
     try {
-      const response = await axios.post( "user/persist", { ...data });
+      const response = await axios.post("/user/persist", { ...data });
+      if (response.type === "sucess") {
+        await itemsetter(response.data.id, endereco)
+      }
+    } catch (err) {
+      setError(err.message || "Erro ao cadastrar usuário");
+    }
+  };
+
+  const itemsetter = async (idUser, endereco={}) => {
+    setidUser(idUser)
+    setEndereco(endereco)
+    Adress = {idUser, ...endereco}
+    await registerAddress(Adress)
+  };
+
+
+
+  const registerAddress = async (Adress) => {
+    try {
+      const response = await axios.post("/adress/persist", { ...Adress });
       if (response.status === 200) {
-        alert("Cadastro realizado com sucesso")
+        console.log("sucesso")
       }
     } catch (err) {
       setError(err.message || "Erro ao cadastrar endereço");
-    } 
+    }
   };
+
 
 
 
@@ -52,11 +75,11 @@ export default function CardWithForm(){
   }
 
 
-return (
-  <MainLayout>
-  <Center>
-  <Cadastro handleDataFromChild={handleDataFromChild}></Cadastro>
-  </Center>
-  </MainLayout>
-);
+  return (
+    <MainLayout>
+      <Center>
+        <Cadastro handleDataFromChild={handleDataFromChild}></Cadastro>
+      </Center>
+    </MainLayout>
+  );
 }

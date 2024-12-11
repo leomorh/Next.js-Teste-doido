@@ -8,16 +8,14 @@ import { useState } from "react"
 
 export default function Login({handleClick}){
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const data = {username, password};
-    console.log(data)
-
+    const [Username, setUsername] = useState('');
+    const [Password, setPassword] = useState('');
+    const data = {Username, Password};
 
     const router = useRouter()
   
-    const goPage = () => {
-      router.push('/')
+    const goSenha = () => {
+      router.push('/user/senha')
     }
 
     const goCadastro = () => {
@@ -63,7 +61,7 @@ export default function Login({handleClick}){
         <Checkbox>Lembrar-me</Checkbox>
         </Field>
         <Field>
-        <Button variant="plain" colorPalette="red" size="sm" float="right" onClick={goPage}> esqueci minha senha </Button>
+        <Button variant="plain" colorPalette="red" size="sm" float="right" onClick={goSenha}> esqueci minha senha </Button>
         </Field>
         </HStack>
         <Button width="full" variant="solid" colorPalette="red" onClick={goEntrar} size="xl"> Entrar </Button>

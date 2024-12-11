@@ -44,7 +44,7 @@ const MainLayout = ({ children }) => {
     <Box display="flex" flexDirection="column" minHeight="100vh">
       <Heading  bgGradient="to-r" gradientFrom="red" gradientTo="red.200" w='full' color="red" display="block" height="4vh">
         <DrawerRoot placement="left" >
-          <DrawerBackdrop />
+          <DrawerBackdrop/>
           <DrawerTrigger>
             <HStack cursor="pointer">
               <Icon >

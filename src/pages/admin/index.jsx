@@ -3,7 +3,7 @@ import  MainLayout  from "@/layouts/layoutPadrao"
 import { Button, Image } from "@chakra-ui/react"
 
 
-const mainpage = () => {
+export default function mainpage() {
   const router = useRouter()
 
   const goPage = () => {
@@ -23,4 +23,3 @@ const mainpage = () => {
   )
 }
 
-export default mainpage;

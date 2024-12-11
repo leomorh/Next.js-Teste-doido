@@ -55,6 +55,7 @@ const MainPage = () => {
     try {
       setLoading(true);
       const response = await axios.post("/adress/persist", { ...data });
+      console.log(data)
       if (response.status === 200) {
         fetchData();
       }
@@ -66,6 +67,7 @@ const MainPage = () => {
   };
 
   const updateAddress = async (data) => {
+    console.log(data)
     try {
       setLoading(true);
       const response = await axios.post(`/adress/persist/${data.id}`, { ...data });
@@ -108,7 +110,7 @@ const MainPage = () => {
 
   return (
     <div>
-      <MainLayout goPage={goPage}>
+      <MainLayout>
         <Tabela data={data} handleDataFromParent={handleDataFromChild} delData={delData} />
       </MainLayout>
     </div>
