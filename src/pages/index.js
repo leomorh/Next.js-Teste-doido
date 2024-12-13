@@ -8,7 +8,7 @@ const app = () => {
   const router = useRouter()
 
   const goPage = () => {
-    router.push('/user/login')
+    router.push('/public/login')
   }
 
   return (

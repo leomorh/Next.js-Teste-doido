@@ -174,9 +174,8 @@ const Tabela = ({ data = [], handleDataFromParent, delData }) => {
           </Table.Body>
         </Table.Root>
         <PaginationRoot
-          count={300}
+          count={data.length}
           onPageChange={(e) => setPage(e.page)}
-          siblingCount={2}
           defaultPage={1}
         >
           <HStack>

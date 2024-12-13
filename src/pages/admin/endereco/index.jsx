@@ -4,42 +4,53 @@ import Tabela from "@/components/TabelaEndereco";
 import MainLayout from "@/layouts/layoutPadrao";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HStack, Stack, Text } from "@chakra-ui/react";
-
+import { useRouter } from 'next/router';
 
 const MainPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [token, setToken] = useState(null);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const router = useRouter();
 
 
-  const handleDataFromChild = async (data = {}) => {
-    if (!data.id) {
-      await registerAddress(data);
-    } else {
-      await updateAddress(data);
-    }
-  };
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.push('/');
+          return;
+        }
 
+        const response = await axios.post('/getByToken', { token });
 
-  const delData = async (id) => {
-    try {
-      setLoading(true);
-      const response = await axios.post(`/adress/delet/${id}`);
-      if (response.status === 200) {
-        fetchData();
+        if (response.type === 'authorized') {
+          setIsAuthorized(true);
+          fetchData(token);
+        } else {
+          setError(response.message);
+          router.push('/');
+        }
+      } catch (error) {
+        console.error('Error verifying user:', error);
+        setError('Error verifying user');
+        router.push('/');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err.message || "Falha ao deletar endereço");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
+    verifyUser();
+  }, [router]);
 
-  const fetchData = async () => {
+  const fetchData = async (token) => {
     try {
       setLoading(true);
-      const response = await axios.get("/adress/getall");
+      const response = await axios.get("/adress/getall", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (response.data && Array.isArray(response.data)) {
         setData(response.data);
       }
@@ -50,14 +61,23 @@ const MainPage = () => {
     }
   };
 
+  const handleDataFromChild = async (data = {}) => {
+    if (!data.id) {
+      await registerAddress(data);
+    } else {
+      await updateAddress(data);
+    }
+  };
 
   const registerAddress = async (data) => {
+    if (!token) return;
     try {
       setLoading(true);
-      const response = await axios.post("/adress/persist", { ...data });
-      console.log(data)
+      const response = await axios.post("/adress/persist", { ...data }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (response.status === 200) {
-        fetchData();
+        fetchData(token);
       }
     } catch (err) {
       setError(err.message || "Erro ao cadastrar endereço");
@@ -67,12 +87,14 @@ const MainPage = () => {
   };
 
   const updateAddress = async (data) => {
-    console.log(data)
+    if (!token) return;
     try {
       setLoading(true);
-      const response = await axios.post(`/adress/persist/${data.id}`, { ...data });
+      const response = await axios.post(`/adress/persist/${data.id}`, { ...data }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (response.status === 200) {
-        fetchData();
+        fetchData(token);
       }
     } catch (err) {
       setError(err.message || "Erro ao editar endereço");
@@ -81,10 +103,22 @@ const MainPage = () => {
     }
   };
 
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const delData = async (id) => {
+    if (!token) return;
+    try {
+      setLoading(true);
+      const response = await axios.post(`/adress/delet/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (response.status === 200) {
+        fetchData(token);
+      }
+    } catch (err) {
+      setError(err.message || "Falha ao deletar endereço");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -102,18 +136,22 @@ const MainPage = () => {
   if (error) {
     return (
       <MainLayout>
-        <div>
-          {error}
-        </div>
-      </MainLayout>);
+        <div>{error}</div>
+      </MainLayout>
+    );
+  }
+  if (!isAuthorized) {
+    return (
+      <MainLayout>
+        <div>Unauthorized access</div>
+      </MainLayout>
+    );
   }
 
   return (
-    <div>
-      <MainLayout>
-        <Tabela data={data} handleDataFromParent={handleDataFromChild} delData={delData} />
-      </MainLayout>
-    </div>
+    <MainLayout>
+      <Tabela data={data} handleDataFromParent={handleDataFromChild} delData={delData} />
+    </MainLayout>
   );
 };
 

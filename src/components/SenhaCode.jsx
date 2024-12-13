@@ -1,11 +1,13 @@
-import { AbsoluteCenter, Button, Card, Input, Stack, Text, VStack } from "@chakra-ui/react"
-import { Field } from "@/components/ui/field"
+import { AbsoluteCenter, Button, Card, Input, Stack, Text, VStack } from "@chakra-ui/react";
+import { Field } from "@/components/ui/field";
 import { useRouter } from 'next/router';
 import React, { useState } from "react";
 import { PasswordInput } from "./ui/password-input";
+import axios from '../utils/axios'; 
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
-
-export default function NovaSenha({ handleDataFromChild, sendCode, sendPassword }) {
+export default function NovaSenha() {
 
   const [Email, setEmail] = useState('');
   const [code, setCode] = useState('');
@@ -14,35 +16,59 @@ export default function NovaSenha({ handleDataFromChild, sendCode, sendPassword 
   const [step, setStep] = useState(1);
   const router = useRouter();
 
-
-  const sendData = async () => {
-      await handleDataFromChild(Email)
-      if (controller === true) {
-        await setStep(2)
+  const sendEmail = async (Email) => {
+    try {
+      const response = await axios.post(`/send`, { Email });
+      if (response.type === "success") {
+        toast.success(response.message + " Verifique seu email!");
+        setStep(2); 
+      } else {
+        toast.error(response.message + " Volte a página e tente novamente!");
       }
-  }
-
-  const sendData2 = async () => {
-    sendCode({ Email, code })
-    if (controller === true) {
-      setStep(3)
+    } catch (error) {
+      console.log(error.message);
+      toast.error("Erro ao enviar o email!");
     }
   }
 
-  const sendData3 = async () => {
-    if (newPassword === ConfirmPassword) {
-      sendPassword({ Email, newPassword })
-      if (controller === true) {
-        setStep(4)
+  const sendCode = async () => {
+    try {
+      const response = await axios.post(`/code`, { Email, code });
+      if (response.type === "success") {
+        toast.success(response.message + " Troque sua senha!");
+        setStep(3); 
+      } else {
+        toast.error(response.message);
       }
+    } catch (error) {
+      console.log(error.message);
+      toast.error("Erro ao enviar o código!");
+    }
+  }
+
+  const sendPassword = async () => {
+    try {
+      if (newPassword === ConfirmPassword) {
+        const response = await axios.post(`/newPassword`, { Email, newPassword });
+        if (response.type === "info") {
+          toast.success(response.message + " " + "Voltando a página inicial!");
+          await setStep(4);
+          await router.push("/");
+        } else {
+          toast.error(response.message);
+        }
+      } else {
+        toast.error("Senhas diferentes informadas");
+      }
+    } catch (error) {
+      console.log(error.message);
+      toast.error("Erro ao atualizar a senha!");
     }
   }
 
   const goPage = () => {
-    router.push('/')
+    router.push('/');
   }
-
-
 
   return (
     <AbsoluteCenter w="100%" h="100%">
@@ -51,19 +77,19 @@ export default function NovaSenha({ handleDataFromChild, sendCode, sendPassword 
           <Card.Header>
             <Card.Title>Nova Senha</Card.Title>
             <Card.Description>
-              informe seu email para recuperação
+              Informe seu email para recuperação
             </Card.Description>
           </Card.Header>
           <Card.Body>
             <Stack gap="4" w="full">
               <Field label="Email" color="red">
-                <Input errorText="This field is required" required onChange={(e) => setEmail(e.target.value)} placeholder="eu@exemplo.com" />
+                <Input errorText="Este campo é obrigatório" required onChange={(e) => setEmail(e.target.value)} placeholder="eu@exemplo.com" />
               </Field>
             </Stack>
           </Card.Body>
           <Card.Footer justifyContent="flex-end">
-            <Button variant="outline" onClick={goPage}>Cancel</Button>
-            <Button id ="botao" variant="solid" onClick={sendData}>Próximo</Button>
+            <Button variant="outline" onClick={goPage}>Cancelar</Button>
+            <Button variant="solid" onClick={() => sendEmail(Email)}>Próximo</Button>
           </Card.Footer>
         </Card.Root>
       )}
@@ -72,19 +98,20 @@ export default function NovaSenha({ handleDataFromChild, sendCode, sendPassword 
           <Card.Header>
             <Card.Title>Nova Senha</Card.Title>
             <Card.Description>
-              informe o codigo de acesso
+              Informe o código de acesso
             </Card.Description>
           </Card.Header>
           <Card.Body>
             <Stack gap="4" w="full">
-              <Field label="Email" color="red">
+              <Field label="Código" color="red">
                 <Input required onChange={(e) => setCode(e.target.value)} placeholder="9999" />
               </Field>
             </Stack>
           </Card.Body>
           <Card.Footer justifyContent="flex-end">
-            <Button variant="outline" onClick={goPage}>Cancel</Button>
-            <Button variant="solid" onClick={sendData2} >Próximo</Button>
+            <Button variant="outline" onClick={goPage}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setStep(1)}>Anterior</Button>
+            <Button variant="solid" onClick={sendCode}>Próximo</Button>
           </Card.Footer>
         </Card.Root>
       )}
@@ -93,7 +120,7 @@ export default function NovaSenha({ handleDataFromChild, sendCode, sendPassword 
           <Card.Header>
             <Card.Title>Nova Senha</Card.Title>
             <Card.Description>
-              informe seu email para recuperação
+              Informe sua nova senha
             </Card.Description>
           </Card.Header>
           <Card.Body>
@@ -101,14 +128,15 @@ export default function NovaSenha({ handleDataFromChild, sendCode, sendPassword 
               <Field label="Nova Senha" color="red">
                 <PasswordInput required onChange={(e) => setNewPassword(e.target.value)} placeholder="Senha" />
               </Field>
-              <Field label="confirme sua Senha" color="red">
+              <Field label="Confirme sua Senha" color="red">
                 <PasswordInput required onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Senha" />
               </Field>
             </Stack>
           </Card.Body>
           <Card.Footer justifyContent="flex-end">
-            <Button variant="outline" onclick={goPage}>Cancel</Button>
-            <Button variant="solid" onClick={sendData3}>Próximo</Button>
+            <Button variant="outline" onClick={goPage}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setStep(2)}>Anterior</Button>
+            <Button variant="solid" onClick={sendPassword}>Próximo</Button>
           </Card.Footer>
         </Card.Root>
       )}
@@ -121,18 +149,12 @@ export default function NovaSenha({ handleDataFromChild, sendCode, sendPassword 
             </Card.Description>
           </Card.Header>
           <Card.Body>
-            <VStack>
-              <Text>
-                Recarregue a pagina e retorne a tela de Login.
-              </Text>
-              <Button onClick={goPage}>
-                Pagina inicial
-              </Button>
-            </VStack>
           </Card.Body>
         </Card.Root>
       )}
+      <ToastContainer />
     </AbsoluteCenter>
-
   );
 }
+
+

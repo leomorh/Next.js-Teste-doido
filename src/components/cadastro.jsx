@@ -28,13 +28,14 @@ export default function Cadastro({ handleDataFromChild }) {
 
   const router = useRouter()
 
-  const goPage = () => {
+  const goPage = async () => {
     router.push('/')
   }
 
-  const SendData = () => {
+  const SendData = async () => {
     if (PasswordConfirm === Password) {
       handleDataFromChild(data, endereco);
+      await goPage;
     }
 
   }
