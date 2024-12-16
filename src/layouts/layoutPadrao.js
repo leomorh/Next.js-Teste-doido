@@ -1,49 +1,87 @@
-import { Box, Heading, Button, Center, Text, DrawerTrigger, Icon, HStack, Grid, GridItem } from "@chakra-ui/react"
+import { Box, Heading, Button, Center, Text, Icon, HStack, Grid, GridItem } from "@chakra-ui/react";
 import { MdOutlineSailing } from "react-icons/md";
-import {
-  DrawerBackdrop,
-  DrawerBody,
-  DrawerCloseTrigger,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerRoot
-} from "@/components/ui/drawer"
+import { DrawerBackdrop, DrawerBody, DrawerCloseTrigger, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerRoot, DrawerTrigger } from "@/components/ui/drawer";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
 
 const MainLayout = ({ children }) => {
   const router = useRouter();
+  const [token, setToken] = useState(null);
 
-  // Function to handle navigation
-  const goEndereco = () => {
-    router.push('/admin/endereco');
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedToken = localStorage.getItem('token');
+      setToken(storedToken);
+    }
+  }, []);
+
+  const goLogin = () => {
+    router.push('/public/login');
   };
-  const goTermos = () => {
-    router.push('/');
-  };
-  const goPolitic = () => {
-    router.push('/');
-  };
-  const goServico = () => {
-    router.push('/');
-  };
-  const goPerguntas = () => {
-    router.push('/');
-  };
+
   const goMainPage = () => {
     router.push('/');
   };
 
- 
-  const handleLogout = () => {
-    localStorage.setItem('token', null);  
-    router.push('/'); 
+  const goEndereco = () => {
+    router.push('/admin/endereco');
   };
 
+  const goTermos = () => {
+    router.push('/');
+  };
+
+  const goPolitic = () => {
+    router.push('/');
+  };
+
+  const goServico = () => {
+    router.push('/');
+  };
+
+  const goPerguntas = () => {
+    router.push('/');
+  };
+
+  const handleLogout = async () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+      setToken(null);
+      router.push('/public/login');
+    }
+  };
+
+  if (!token) {
+    return (
+      <Box display="flex" flexDirection="column" height="100vh">
+        <Heading bgGradient="to-r" gradientFrom="red" gradientTo="red.200" w="full" color="red" display="block" height="4%">
+              <Icon cursor="pointer" onClick={goLogin}>
+                <MdOutlineSailing color="black" />
+              </Icon>
+        </Heading>
+        
+        <main style={{ flex: 1, width: '100%' }} height="91%">
+          <Box height="100%" padding="3vh">
+            {children}
+          </Box>
+        </main>
+        
+        <footer width="full" height="5%">
+          <Center as="footer" width="full" height="100%">
+            <Button cursor="pointer" variant="plain" color="red" onClick={goTermos}>Termos de Serviço</Button>
+            <Button cursor="pointer" variant="plain" color="red" onClick={goPolitic}>Política de Privacidade</Button>
+            <Button cursor="pointer" variant="plain" color="red" onClick={goServico}>Termos de Serviço de IA</Button>
+            <Button cursor="pointer" variant="plain" color="red" onClick={goPerguntas}>Perguntas Frequentes</Button>
+          </Center>
+        </footer>
+      </Box>
+    );
+  }
+
   return (
-    <Box display="flex" flexDirection="column" Height="100vh">
-      <Heading bgGradient="to-r" gradientFrom="red" gradientTo="red.200" w='full' color="red" display="block" height="4%">
+    <Box display="flex" flexDirection="column" height="100vh">
+      <Heading bgGradient="to-r" gradientFrom="red" gradientTo="red.200" w="full" color="red" display="block" height="4%">
         <DrawerRoot placement="left">
           <DrawerBackdrop />
           <DrawerTrigger>
@@ -108,17 +146,25 @@ const MainLayout = ({ children }) => {
               </Grid>
             </DrawerBody>
             <DrawerFooter>
-            <Button cursor="pointer" variant="solid" colorPalette="red" color="blackAlpha.900" onClick={handleLogout}>Logout</Button>
+              <HStack>
+                {token && (
+                  <Button cursor="pointer" variant="solid" color="blackAlpha.900" onClick={handleLogout}>Logout</Button>
+                )}
+              </HStack>
             </DrawerFooter>
             <DrawerCloseTrigger />
           </DrawerContent>
         </DrawerRoot>
       </Heading>
 
-      <main style={{ flex: 1, width: '100%' }} height="91%"><Box heigth="100%" padding="3vh">{children}</Box></main>
+      <main style={{ flex: 1, width: '100%' }} height="91%">
+        <Box height="100%" padding="3vh">
+          {children}
+        </Box>
+      </main>
 
       <footer width="full" height="5%">
-        <Center as="footer" width="full" heigth="100%">
+        <Center as="footer" width="full" height="100%">
           <Button cursor="pointer" variant="plain" color="red" onClick={goTermos}>Termos de Serviço</Button>
           <Button cursor="pointer" variant="plain" color="red" onClick={goPolitic}>Política de Privacidade</Button>
           <Button cursor="pointer" variant="plain" color="red" onClick={goServico}>Termos de Serviço de IA</Button>
@@ -130,3 +176,8 @@ const MainLayout = ({ children }) => {
 };
 
 export default MainLayout;
+
+
+
+
+

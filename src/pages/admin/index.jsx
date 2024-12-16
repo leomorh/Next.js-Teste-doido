@@ -5,7 +5,6 @@ import { Button, Image } from "@chakra-ui/react"
 
 export default function mainpage() {
 
-  
   const router = useRouter()
 
   const goPage = () => {

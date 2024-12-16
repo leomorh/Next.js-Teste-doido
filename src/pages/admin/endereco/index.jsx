@@ -10,7 +10,6 @@ const MainPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [token, setToken] = useState(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const router = useRouter();
 
@@ -23,9 +22,7 @@ const MainPage = () => {
           router.push('/');
           return;
         }
-
         const response = await axios.post('/getByToken', { token });
-
         if (response.type === 'authorized') {
           setIsAuthorized(true);
           fetchData(token);
