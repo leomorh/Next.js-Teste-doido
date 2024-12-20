@@ -67,6 +67,7 @@ const MainPage = () => {
   };
 
   const registerAddress = async (data) => {
+    const token = localStorage.getItem('token');
     if (!token) return;
     try {
       setLoading(true);
@@ -84,6 +85,7 @@ const MainPage = () => {
   };
 
   const updateAddress = async (data) => {
+    const token = localStorage.getItem('token');
     if (!token) return;
     try {
       setLoading(true);
@@ -101,6 +103,7 @@ const MainPage = () => {
   };
 
   const delData = async (id) => {
+    const token = localStorage.getItem('token');
     if (!token) return;
     try {
       setLoading(true);

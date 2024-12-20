@@ -12,7 +12,7 @@ export default function CardWithForm() {
   const [error, setError] = useState(null);
   const [idUser, setIdUser] = useState(null);
   const [endereco, setEndereco] = useState([]);
-  let Adress = {idUser, endereco};
+  let Adress = { idUser, endereco };
 
   const handleDataFromChild = async (data, endereco = {}) => {
     await registerUser(data, endereco);
@@ -34,7 +34,7 @@ export default function CardWithForm() {
   const itemSetter = async (idUser, endereco = {}) => {
     setIdUser(idUser);
     setEndereco(endereco);
-    Adress = {idUser, ...endereco};
+    Adress = { idUser, ...endereco };
     await registerAddress(Adress);
   };
 
@@ -75,9 +75,7 @@ export default function CardWithForm() {
 
   return (
     <MainLayout>
-      <Center>
-        <Cadastro handleDataFromChild={handleDataFromChild}></Cadastro>
-      </Center>
+      <Cadastro handleDataFromChild={handleDataFromChild}></Cadastro>
       <ToastContainer />
     </MainLayout>
   );

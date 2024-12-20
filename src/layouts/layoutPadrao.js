@@ -27,6 +27,9 @@ const MainLayout = ({ children }) => {
   const goEndereco = () => {
     router.push('/admin/endereco');
   };
+  const goUsuario = () => {
+    router.push('/admin/usuario');
+  };
 
   const goTermos = () => {
     router.push('/');
@@ -56,17 +59,17 @@ const MainLayout = ({ children }) => {
     return (
       <Box display="flex" flexDirection="column" height="100vh">
         <Heading bgGradient="to-r" gradientFrom="red" gradientTo="red.200" w="full" color="red" display="block" height="4%">
-              <Icon cursor="pointer" onClick={goLogin}>
-                <MdOutlineSailing color="black" />
-              </Icon>
+          <Icon cursor="pointer" onClick={goLogin}>
+            <MdOutlineSailing color="black" />
+          </Icon>
         </Heading>
-        
+
         <main style={{ flex: 1, width: '100%' }} height="91%">
           <Box height="100%" padding="3vh">
             {children}
           </Box>
         </main>
-        
+
         <footer width="full" height="5%">
           <Center as="footer" width="full" height="100%">
             <Button cursor="pointer" variant="plain" color="red" onClick={goTermos}>Termos de Serviço</Button>
@@ -130,7 +133,7 @@ const MainLayout = ({ children }) => {
                   </Button>
                 </GridItem>
                 <GridItem colSpan={5}>
-                  <Button bgGradient="to-r" gradientFrom="red" gradientTo="red.200" onClick={goEndereco} width="100%">
+                  <Button bgGradient="to-r" gradientFrom="red" gradientTo="red.200" onClick={goUsuario} width="100%">
                     <Grid width="100%" templateRows="repeat(1, 2fr)" templateColumns="repeat(5, 1fr)" cursor="pointer">
                       <GridItem colSpan={1}>
                         <Icon>
@@ -148,7 +151,7 @@ const MainLayout = ({ children }) => {
             <DrawerFooter>
               <HStack>
                 {token && (
-                  <Button cursor="pointer" variant="solid" color="blackAlpha.900" onClick={handleLogout}>Logout</Button>
+                  <Button cursor="pointer" variant="solid" color="blackAlpha.900" bgColor="red" onClick={handleLogout}>Logout</Button>
                 )}
               </HStack>
             </DrawerFooter>

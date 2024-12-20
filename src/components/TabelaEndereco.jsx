@@ -38,9 +38,11 @@ const Tabela = ({ data = [], handleDataFromParent, delData }) => {
   let number = Number;
   let complement = Complement;
 
-
   const pageSize = 15;
   const [page, setPage] = useState(1);
+
+  const totalItems = data.length; 
+  const totalPages = Math.ceil(totalItems / pageSize)
 
   const visibleItems = data.slice((page - 1) * pageSize, page * pageSize);
 
@@ -174,9 +176,7 @@ const Tabela = ({ data = [], handleDataFromParent, delData }) => {
           </Table.Body>
         </Table.Root>
         <PaginationRoot
-          count={data.length}
-          onPageChange={(e) => setPage(e.page)}
-          defaultPage={1}
+        count={totalItems} pageSize={pageSize} currentPage={page} onPageChange={(e) => setPage(e.page)}
         >
           <HStack>
             <PaginationPrevTrigger onClick={() => setPage(prev => Math.max(prev - 1, 1))} />
